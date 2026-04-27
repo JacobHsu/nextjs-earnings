@@ -1,4 +1,4 @@
-import type { EarningsEvent } from '@/types/earnings'
+import type { EarningsEvent, StockQuote } from '@/types/earnings'
 import EarningsCard from './EarningsCard'
 
 interface EarningsDayColumnProps {
@@ -6,9 +6,10 @@ interface EarningsDayColumnProps {
   events: EarningsEvent[]
   isToday: boolean
   isCurrentMonth: boolean
+  quotes: Record<string, StockQuote>
 }
 
-export default function EarningsDayColumn({ events }: EarningsDayColumnProps) {
+export default function EarningsDayColumn({ events, quotes }: EarningsDayColumnProps) {
   const preMarket = events.filter((e) => e.isPreMarket)
   const postMarket = events.filter((e) => !e.isPreMarket)
 
@@ -19,7 +20,7 @@ export default function EarningsDayColumn({ events }: EarningsDayColumnProps) {
         <div className="mb-3">
           <div className="text-[11px] font-medium text-gray-400 px-2 mb-1">盤前</div>
           {preMarket.map((event) => (
-            <EarningsCard key={event.id} event={event} />
+            <EarningsCard key={event.id} event={event} quote={quotes[event.ticker]} />
           ))}
         </div>
       )}
@@ -29,7 +30,7 @@ export default function EarningsDayColumn({ events }: EarningsDayColumnProps) {
         <div>
           <div className="text-[11px] font-medium text-gray-400 px-2 mb-1">盤後</div>
           {postMarket.map((event) => (
-            <EarningsCard key={event.id} event={event} />
+            <EarningsCard key={event.id} event={event} quote={quotes[event.ticker]} />
           ))}
         </div>
       )}

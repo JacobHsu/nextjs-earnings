@@ -14,7 +14,11 @@
       "WebFetch(domain:gamma-api.polymarket.com)",
       "Bash(pnpm dev *)",
       "Bash(kill %1)",
-      "Bash(wait)"
+      "Bash(wait)",
+      "Bash(curl -s \"https://query1.finance.yahoo.com/v7/finance/quote?symbols=AAPL,MSFT&fields=regularMarketPrice,longName&lang=zh-TW&region=TW\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s \"https://query1.finance.yahoo.com/v8/finance/chart/AAPL?interval=1d&range=1d\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s \"https://query2.finance.yahoo.com/v8/finance/spark?symbols=AAPL,MSFT,NVDA&range=1d&interval=1d\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s \"http://localhost:3000/api/prices?symbols=AAPL,MSFT,NVDA\")"
     ]
   }
 }

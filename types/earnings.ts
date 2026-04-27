@@ -72,4 +72,12 @@ export interface EarningsEvent {
   isClosed: boolean
 }
 
+export interface StockQuote {
+  symbol: string
+  price: number
+  change: number
+  changePercent: number
+  name: string
+}
+
 export type SortOrder = 'end_date' | 'volume'

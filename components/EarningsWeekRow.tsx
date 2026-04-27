@@ -1,4 +1,4 @@
-import type { EarningsEvent } from '@/types/earnings'
+import type { EarningsEvent, StockQuote } from '@/types/earnings'
 import { getWeekDays } from '@/lib/parseEarnings'
 import EarningsDayColumn from './EarningsDayColumn'
 
@@ -8,6 +8,7 @@ interface EarningsWeekRowProps {
   mondayIso: string
   dayMap: Map<string, EarningsEvent[]>
   todayIso: string
+  quotes: Record<string, StockQuote>
   onPrevWeek: () => void
   onNextWeek: () => void
 }
@@ -16,6 +17,7 @@ export default function EarningsWeekRow({
   mondayIso,
   dayMap,
   todayIso,
+  quotes,
   onPrevWeek,
   onNextWeek,
 }: EarningsWeekRowProps) {
@@ -76,6 +78,7 @@ export default function EarningsWeekRow({
               events={dayMap.get(dayKey) ?? []}
               isToday={dayKey === todayIso}
               isCurrentMonth={true}
+              quotes={quotes}
             />
           )
         })}

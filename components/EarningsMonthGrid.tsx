@@ -43,6 +43,7 @@ export default function EarningsMonthGrid({
               events={dayMap.get(dayKey) ?? []}
               isToday={dayKey === todayIso}
               isCurrentMonth={isCurrentMonth}
+              quotes={{}}
             />
           )
         })}

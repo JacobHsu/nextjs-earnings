@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import type { EarningsEvent } from '@/types/earnings'
+import type { EarningsEvent, StockQuote } from '@/types/earnings'
 import { groupEventsByWeek } from '@/lib/parseEarnings'
 import EarningsFilter from './EarningsFilter'
 import EarningsWeekRow from './EarningsWeekRow'
@@ -37,6 +37,7 @@ function shiftWeek(isoDate: string, weeks: number): string {
 export default function EarningsCalendar({ initialEvents }: EarningsCalendarProps) {
   const now = new Date()
   const [events, setEvents] = useState<EarningsEvent[]>(initialEvents)
+  const [quotes, setQuotes] = useState<Record<string, StockQuote>>({})
   const [volumeActive, setVolumeActive] = useState(false)
   const [loading, setLoading] = useState(false)
   const [mondayIso, setMondayIso] = useState(() => localMondayIso(now))
@@ -70,6 +71,29 @@ export default function EarningsCalendar({ initialEvents }: EarningsCalendarProp
     )
   }, [initialEvents])
 
+  useEffect(() => {
+    if (events.length === 0) return
+    const valid = [...new Set(
+      events.map((e) => e.ticker).filter((t) => /^[A-Z]{1,5}$/.test(t))
+    )]
+    if (valid.length === 0) return
+
+    const batches: string[] = []
+    for (let i = 0; i < valid.length; i += 30) {
+      batches.push(valid.slice(i, i + 30).join(','))
+    }
+
+    Promise.all(
+      batches.map((b) =>
+        fetch(`/api/prices?symbols=${encodeURIComponent(b)}`)
+          .then((r) => r.ok ? r.json() : {})
+          .catch(() => ({}))
+      )
+    ).then((results) => {
+      setQuotes(Object.assign({}, ...results))
+    })
+  }, [events])
+
   const handlePrevWeek = () => setMondayIso((iso) => shiftWeek(iso, -1))
   const handleNextWeek = () => setMondayIso((iso) => shiftWeek(iso, 1))
 
@@ -100,6 +124,7 @@ export default function EarningsCalendar({ initialEvents }: EarningsCalendarProp
             mondayIso={mondayIso}
             dayMap={dayMap}
             todayIso={todayIso}
+            quotes={quotes}
             onPrevWeek={handlePrevWeek}
             onNextWeek={handleNextWeek}
           />
