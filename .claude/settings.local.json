@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); active=[e for e in data if not e['isClosed']]; print\\(f'Total: {len\\(data\\)}, Active: {len\\(active\\)}, Closed: {len\\(data\\)-len\\(active\\)}'\\); print\\('First active:', json.dumps\\(active[0] if active else {}, indent=2\\)\\)\")",
+      "Bash(curl -s \"https://gamma-api.polymarket.com/events?tag_slug=earnings&closed=false&limit=10&order=end_date&ascending=true\")",
+      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(f'Count: {len\\(data\\)}'\\); [print\\(f'{e[\\\\\"title\\\\\"][:60]} | closed={e[\\\\\"closed\\\\\"]} | endDate={e[\\\\\"endDate\\\\\"][:10]}'\\) for e in data[:5]]\")",
+      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); active=[e for e in data if not e['isClosed']]; print\\(f'Total: {len\\(data\\)}, Active\\(not closed\\): {len\\(active\\)}'\\); [print\\(f'{e[\\\\\"ticker\\\\\"]} | {e[\\\\\"companyName\\\\\"]} | EPS={e[\\\\\"epsEstimate\\\\\"]} | Prob={e[\\\\\"probability\\\\\"]}% | Date={str\\(e[\\\\\"earningsDate\\\\\"]\\)[:10]}'\\) for e in active[:8]]\")",
+      "Bash(curl -s \"http://localhost:3000/earnings\")",
+      "Bash(python -c \"import sys; content=sys.stdin.read\\(\\); print\\('Has GD:',  'General Dynamics' in content\\); print\\('Has IMAX:', 'IMAX' in content\\); print\\('Has 財報日曆:', '財報日曆' in content\\); print\\('Has 超預期:', '超預期' in content\\)\")",
+      "Bash(python -c \"import sys; content=sys.stdin.read\\(\\); print\\('Has EPS:', 'EPS' in content\\); print\\('Has Polymarket link:', 'polymarket.com/event' in content\\); print\\('Has probability:', 'probability' in content.lower\\(\\) or '%' in content\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(curl -s \"http://localhost:3000/api/earnings?order=volume\")",
+      "WebFetch(domain:polymarket.com)",
+      "WebFetch(domain:gamma-api.polymarket.com)",
+      "Bash(pnpm dev *)",
+      "Bash(kill %1)",
+      "Bash(wait)"
+    ]
+  }
+}
